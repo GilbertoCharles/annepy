@@ -10,7 +10,6 @@
 from easyhid import Enumeration
 import math
 from time import sleep
-import itertools
 from utils import ANNE_LAYOUT
 
 
@@ -67,7 +66,7 @@ class Keeb(object):
         except:
             print(self._warning("ERROR: Verify your RGB format\n"))
 
-    def _generate_multi_color(self,arrayOfRgbValues: list):
+    def _generate_multi_color(self, arrayOfRgbValues: list):
         hid_command = []
         real_command_info_length = len(self._COMMAND_INFO) + 1
         maxMessageLength = 55 - real_command_info_length
@@ -87,7 +86,7 @@ class Keeb(object):
                 [2] + rgb
             hid_command.append(message)
         return hid_command
-    
+
     def set_multi(self, rgb: list):
         """
         Receives a bi-dimensional array of sequencial RGB values
@@ -97,7 +96,7 @@ class Keeb(object):
         The fisrt item being ESC key, second being 1 key, last being right control key.
         """
 
-        black = [0,0,0]
+        black = [0, 0, 0]
         rgb_matrix = []
         for key in ANNE_LAYOUT:
             if ANNE_LAYOUT.get(key) is None:
@@ -105,7 +104,7 @@ class Keeb(object):
             else:
                 try:
                     rgb_matrix += rgb[ANNE_LAYOUT.get(key)]
-                except :
+                except:
                     rgb_matrix += black
 
         hid_command = self._generate_multi_color(rgb_matrix)
@@ -114,7 +113,6 @@ class Keeb(object):
             self._keeb.write(command)
             sleep(0.05)
         self._keeb.close()
-
 
     def _warning(self, str):
         return '\033[91m' + str + '\033[0m'
